@@ -1,0 +1,71 @@
+#app>#background {
+    background-image: url("../img/back.jpg");
+    width: 640px;
+    height: 426px;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+}
+
+#app .front-image {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+#app button{
+    z-index: 1000;
+    position: absolute;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+
+
+#app #img1 {
+    left: 0px;
+    top: 0px;
+}
+
+#app #img2 {
+    left: 20px;
+    top: 0px;
+}
+
+#app #img3 {
+    left: 320px;
+    top: 0px;
+}
+
+#app #img4 {
+    left: 170px;
+    top: 226px;
+}
+
+#app #img5 {
+    left: 340px;
+    top: 110px;
+}
+
+#app #img6 {
+    left: 00px;
+    top: 226px;
+}
+
+#app #img7 {
+    left: 170px;
+    top: 10px;
+}
+
+#app #img8 {
+    left: 340px;
+    top: 226px;
+}
