@@ -6,12 +6,13 @@ let slideshow = {
             <div v-for="(anImage, index) in frontImages" v-bind:key="anImage.src" v-bind:id="'img'+(index+1)" class="front-image" v-show="anImage.isActive" v-bind:style="{backgroundImage: 'url(' + anImage.src + ')'}">
             </div>
         </transition-group>
+        <button type="button" v-html="isPlayIcon" v-on:click="isPlayBtnClick"></button>
     </div>`,
     data: function () {
         return {
-            time: 0,
             animTime: 30,//sec
             isLoop: true,
+            isPlay: true,
             frontImages: [
                 { src: "./img/s1.png", isActive: false, timerStartObj: null, timerLifeObj: null, startTime: "0%", lifeTime: "30%" },
                 { src: "./img/s2.png", isActive: false, timerStartObj: null, timerLifeObj: null, startTime: "60%", lifeTime: "30%" },
@@ -24,12 +25,17 @@ let slideshow = {
             ]
         };
     },
+    computed: {
+        isPlayIcon: function () {
+            return this.isPlay ? '<i class="fas fa-stop"></i>' : '<i class="fas fa-play"></i>';
+        }
+    },
     methods: {
-        startClock: function(){
-            for(let index = 0; index < this.frontImages.length; index++){
-                let frontImage = this.frontImages[index];
+        startClock: function () {
+            for (let index = 0; index < this.frontImages.length; index++) {
                 let that = this;
-                frontImage.timerStartObj = setTimeout(function(){
+                let frontImage = that.frontImages[index];
+                frontImage.timerStartObj = setTimeout(function () {
                     that.fireImage(index);
                 }, that.getPercent2MilliSec(frontImage.startTime));
             }
@@ -54,36 +60,49 @@ let slideshow = {
             let animTimeMilliSec = this.animTime * 1000;
             let ratio = this.getPercent2Num(str) / 100;
             return animTimeMilliSec * ratio;
+        },
+        isPlayBtnClick: function () {
+
+            this.isPlay = !this.isPlay;
+
+            if (!this.isPlay) {
+                this.clearTimer();
+                for (let index = 0; index < this.frontImages.length; index++) {
+                    let frontImage = this.frontImages[index];
+                    frontImage.isActive = false;
+                }
+            }
+            else {
+                this.initTimer();
+            }
+        },
+        clearTimer: function () {
+            this.isPlay = false;
+            for (let index = 0; index < this.frontImages.length; index++) {
+                let frontImage = this.frontImages[index];
+                clearTimeout(frontImage.timerStartObj);
+                clearTimeout(frontImage.timerLifeObj);
+            }
+            if (this.isLoop) {
+                clearInterval(this.animLoopTimer);
+            }
+        },
+        initTimer: function(){
+            let that = this;
+            this.isPlay = true;
+            if (this.isLoop) {
+                this.animLoopTimer = setInterval(function () {
+                    that.startClock();
+                }, 1000 * this.animTime);
+            }
+            that.startClock();
         }
     },
     created: function () {
-        let that = this;
-
-        // function loop() {
-        //     let rand = that.getRandom(0, 1000*6);
-        //     setTimeout(function() {
-        //         that.fireImage();
-        //             loop();  
-        //     }, rand);
-        // }
-        // loop();
-
-        if (this.isLoop) {
-            this.animLoopTimer = setInterval(function () {
-                that.startClock();
-            }, 1000 * this.animTime);
-        }
-        that.startClock();
-
+        this.initTimer();
     },
     beforeDestroy: function () {
-        for (frontImage in this.frontImages) {
-            clearTimeout(frontImage.timerLifeObj);
-            clearTimeout(frontImage.timerStartObj);
-        }
-        if (this.isLoop) {
-            clearInterval(this.animLoopTimer);
-        }
+        this.clearTimer();
     }
 
 }

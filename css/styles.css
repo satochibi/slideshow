@@ -16,9 +16,14 @@
     z-index: 1;
 }
 
-#app button{
+#app button {
     z-index: 1000;
     position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 160%;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -28,7 +33,6 @@
 .fade-enter, .fade-leave-to {
     opacity: 0;
 }
-
 
 #app #img1 {
     left: 0px;
